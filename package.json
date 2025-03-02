@@ -15,7 +15,7 @@
     "react-dom": "^19.0.0"
   },
   "prisma": {
-  "seed": "ts-node ./prisma/seed.js"
+  "seed": "node ./prisma/seed.js"
 },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
