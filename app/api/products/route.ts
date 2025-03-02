@@ -2,9 +2,19 @@ import prisma from "@/app/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  //devuelve 10 productos
-  const products = await prisma.product.findMany({ take: 10 });
-  return NextResponse.json({ products });
+  try {
+    // Devuelve 10 productos
+    const products = await prisma.product.findMany({ take: 10 })
+
+    return NextResponse.json({ products }, { status: 200 })
+  } catch (error) {
+    console.error('❌ Error al obtener productos:', error)
+
+    return NextResponse.json(
+      { message: 'Error al obtener los productos', error: (error as Error).message },
+      { status: 500 }
+    )
+  }
 }
 
 type createProductDTO = {
