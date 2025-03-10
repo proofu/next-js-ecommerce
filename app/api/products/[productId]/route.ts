@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { resourceUsage } from "process";  
 
 export async function GET(
     request: NextRequest,
