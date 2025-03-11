@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
   try {
     // Devuelve 10 productos
-    const products = await prisma.product.findMany({ take: 10 })
+    const products = await prisma.product.findMany({ take: 9 })
 
     return NextResponse.json({ products }, { status: 200 })
   } catch (error) {

@@ -1,24 +1,17 @@
+import { Product } from "@prisma/client/edge";
 import Image from "next/image";
 import React from "react";
 
-interface Product {
-  name: string;
-  price: number;
-  imageUrl: string;
-}
+const res = await fetch('http://localhost:3000/api/products/')
+const productsFromDB = await res.json()
 
-const Products: Product[] = [
-  { name: "Zapatos rojos", price: 160, imageUrl: "/images/redShoes.png" },
-  { name: "Remera Real Madrid", price: 90, imageUrl: "/images/remera.jpg" },
-  { name: "Botines Messi", price: 900, imageUrl: "/images/botines.jpg" },
-];
 
 
 const page = () => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-        {Products.map((p) => (
+        {productsFromDB.products.map((p) => (
           <div
             key={p.name}
             className="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden"
