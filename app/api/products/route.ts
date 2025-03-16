@@ -1,4 +1,5 @@
 import prisma from "@/app/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -8,19 +9,37 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") ?? "1", 10);
     const limit = parseInt(searchParams.get("limit") ?? "9", 10);
     const skip = (page - 1) * limit;
+    
+    
+    
+    
+    // Validate page and limit
+    if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+      return NextResponse.json(
+        { error: "Invalid page or limit" },
+        { status: 400 }
+      );
+    }
+    
+    const whereClause: Prisma.ProductWhereInput = {}; // Use Prisma's type
 
     const search = searchParams.get("search") || "";
-    const whereClause = search
-      ? { name: { contains: search, mode: "insensitive" } }
-      : {};
+    const categorySearchId = searchParams.get("categoryId") || "";
+    // const whereClause = search
+    //   ? { name: { contains: search } }
+    //   : {};
+    if (search) {
+      whereClause.name= { contains: search }      
+    } 
+    if(categorySearchId){
+      whereClause.categoryId = parseInt(categorySearchId, 10);
+    }
 
     const products =
       (await prisma.product.findMany({ where: whereClause, skip, take: 9 })) ||
       [];
     const totalProducts = await prisma.product.count({ where: whereClause });
     const totalPages = Math.ceil(totalProducts / 9);
-    
-    
 
     return NextResponse.json(
       { products, totalPages, currentPage: page },
